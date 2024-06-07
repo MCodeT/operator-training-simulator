@@ -2,10 +2,9 @@ import tkinter as tk
 import serial
 import time
 
-arduino = serial.Serial('COM5', 9600)
+arduino = serial.Serial('COM6', 9600)
 
 window = tk.Tk()
-arduino.write(b'1')
 
 # Set the window size to 90% of the screen size
 window_width = int(window.winfo_screenwidth() * 0.9)
@@ -51,6 +50,7 @@ def countdown_screen():
 def start_test():
     for widget in window.winfo_children():
         widget.destroy()
+    
     # Create the game screen
     game_screen = tk.Frame(window)
     game_screen.pack()
@@ -60,33 +60,35 @@ def start_test():
     
     countdown_label = tk.Label(game_screen, text="Time Left: 5", font=("Arial", 16))
     countdown_label.pack(pady=10)
-    
-    def increment_counter():
-        nonlocal counter
-        counter += 1
-
-    button = tk.Button(game_screen, text="Click Me!", command=increment_counter, font=("Arial", 16), width=10, height=2)
-    button.pack(pady=20)
+    counter_label = tk.Label(game_screen, text="Counter: " + str(counter), font=("Arial", 16))
+    counter_label.pack(pady=10)
 
     success_label = tk.Label(game_screen, text="Success!", font=("Arial", 24), fg="green")
     failure_label = tk.Label(game_screen, text="Failure!", font=("Arial", 24), fg="red")
 
-
     def test():
+        nonlocal counter
         remaining_time = 6 - (time.time() - start_time)
         countdown_label.config(text="Time Left: " + str(int(remaining_time)))
+
+        if arduino.in_waiting > 0:
+            message = arduino.readline().decode('utf-8').strip()
+            if message == "Hole detected":
+                counter += 1
+                counter_label.config(text="Counter: " + str(counter))
+
         if remaining_time <= 0:
             if counter >= 10:
                 success_label.pack()
             else:
                 failure_label.pack()
-            # Add a button to go back to the main menu
-            back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=("Arial", 16), width=15, height=2)
-            back_button.pack(pady=20)
+                # Add a button to go back to the main menu
+                back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=("Arial", 16), width=15, height=2)
+                back_button.pack(pady=20)
         else:
             window.after(100, test)
-    
     test()
+
     
 def create_main_menu():
     
