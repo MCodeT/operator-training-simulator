@@ -1,0 +1,7 @@
+{
+    "port": "COM5",
+    "configuration": "cpu=atmega2560",
+    "board": "arduino:avr:mega",
+    "sketch": "..\\..\\Files\\summerSessions\\test.ino\\test.ino",
+    "programmer": "arduinoisp"
+}
