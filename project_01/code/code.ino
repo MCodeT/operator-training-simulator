@@ -19,5 +19,5 @@ void loop() {
     holeDetected = false;
     digitalWrite(led, LOW); // Turn off the LED
   }
-  delay(100); // Debounce delay to avoid multiple counts in a single detection
+  delay(10);
 }
