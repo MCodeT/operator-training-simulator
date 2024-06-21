@@ -81,12 +81,13 @@ def start_test():
     counter = 0
     start_time = time.time()
 
+
+    counter_label = tk.Label(game_screen, text="Rotations: " +
+                             str(counter), font=("Arial", 48), bg='white', fg='black')
+    counter_label.pack(pady=10)
     countdown_label = tk.Label(game_screen, text="Time Left: 100", font=(
         "Arial", 24), bg='white', fg='black')
-    countdown_label.pack(pady=10)
-    counter_label = tk.Label(game_screen, text="Rotations: " +
-                             str(counter), font=("Arial", 24), bg='white', fg='black')
-    counter_label.pack(pady=10)
+    countdown_label.pack(pady=50)
 
     success_label = tk.Label(game_screen, text="Success!", font=(
         "Arial", 24), fg="green", bg='white')
@@ -94,20 +95,22 @@ def start_test():
         "Arial", 24), fg="red", bg='white')
 
     progress_bar = ttk.Progressbar(
-        game_screen, orient="horizontal", length=400, mode="determinate", maximum=initial_time)
+        game_screen, orient="horizontal", length=800, mode="determinate", maximum=initial_time)
     progress_bar.pack(pady=10)
 
+    exit_button = tk.Button(game_screen, text="Cancel", command=lambda: [
+                            game_screen.destroy(), create_main_menu()], font=("Arial", 16), width=10, height=2, bg="red")
+    exit_button.pack(side="bottom", pady=20)
     def test():
         nonlocal counter
         remaining_time = initial_time - (time.time() - start_time)
         countdown_label.config(text="Time Left: " + str(int(remaining_time)))
         progress_bar['value'] = remaining_time
-
         if arduino.in_waiting > 0:
             message = arduino.readline().decode('utf-8').strip()
             if message == "Hole detected":
                 counter += 1
-                counter_label.config(text="Counter: " + str(counter))
+                counter_label.config(text="Rotations: " + str(counter))
 
         if remaining_time <= 0:
             if counter >= 10:
@@ -147,7 +150,7 @@ def create_main_menu():
     main_menu.configure(bg="white")
     main_menu.grid(row=1, column=0, pady=50)
 
-    difficulty_label = tk.Label(main_menu, text="Select Difficulty:", font=("Arial", 16), bg='white')
+    difficulty_label = tk.Label(main_menu, text="Select Difficulty:", font=("Arial", 38), bg='white')
     difficulty_label.grid(row=0, column=0, pady=20)
 
     difficulty_var = tk.StringVar()
@@ -156,10 +159,10 @@ def create_main_menu():
 
     difficulty_options = ["Easy", "Medium", "Hard"]
     difficulty_menu = tk.OptionMenu(main_menu, difficulty_var, *difficulty_options)
-    difficulty_menu.config(font=("Arial", 14))
+    difficulty_menu.config(font=("Arial", 16), width=10, pady=20)
     difficulty_menu.grid(row=1, column=0, pady=20)
 
-    start_button = tk.Button(main_menu, text="Start", command=countdown_screen, font=("Arial", 16), width=10, height=2)
+    start_button = tk.Button(main_menu, text="Start", command=countdown_screen, font=("Arial", 16), width=10, height=2, pady=15)
     start_button.grid(row=2, column=0, pady=20)
     exit_button = tk.Button(main_menu, text="Exit", command=lambda: [window.destroy(), on_closing()], font=("Arial", 16), width=10, height=2, bg="red")
     exit_button.grid(row=3, column=0, pady=200, sticky="s")
