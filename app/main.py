@@ -16,11 +16,16 @@ def identify_arduino():
 
 identifier = identify_arduino()
 
-if identifier == "Counter":
+if identifier == "Taping":
     import taping as interface
-    print("Counter detected")
+    print("Taping detected")
+elif identifier == "Crimping":
+    import crimping as interface
+elif identifier == "Slots":
+    #import slots as interface
+    pass
 else:
-    print("No known Arduino connected.")
+    print("No valid Arduino detected")
     exit()
 
 interface.run()

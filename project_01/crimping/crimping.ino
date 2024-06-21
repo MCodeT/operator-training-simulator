@@ -3,7 +3,7 @@ int led = 13; // You can change this to the pin you connected your LED to
 bool holeDetected = false;
 bool appRunning = false;
 
-#define ARDUINO_TYPE "Counter" // Define a unique identifier for this Arduino
+#define ARDUINO_TYPE "Taping" // Define a unique identifier for this Arduino
 
 void setup() {
   pinMode(ir, INPUT);
@@ -26,6 +26,7 @@ void loop() {
       }
     } else if (command == "CLOSE") {
       appRunning = false;
+      digitalWrite(led, LOW); // Turn on the LED
     }
   }
 
