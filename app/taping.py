@@ -19,7 +19,7 @@ def create_header(parent):
     parent.grid_columnconfigure(0, weight=1)
 
     logo = tk.PhotoImage(
-        file=r"app\assets\logo.png")
+        file=r"assets\logo.png")
     logo = logo.subsample(10, 10)
     logo_label = tk.Label(header, image=logo, bg='gray')
     logo_label.image = logo
