@@ -10,7 +10,6 @@ initial_time = 30
 
 arduino = serial.Serial('COM8', 9600)
 time.sleep(2)
-
 window.attributes('-fullscreen', True)
 
 
@@ -20,7 +19,7 @@ def create_header(parent):
     parent.grid_columnconfigure(0, weight=1)
 
     logo = tk.PhotoImage(
-        file=r"D:\summerSessions\operator-training-simulator\app\assets\logo.png")
+        file=r"app\assets\logo.png")
     logo = logo.subsample(10, 10)
     logo_label = tk.Label(header, image=logo, bg='gray')
     logo_label.image = logo
@@ -73,8 +72,8 @@ def start_test():
     for widget in window.winfo_children():
         widget.destroy()
 
-    create_header(window)
     arduino.write(b'RUNNING\n')
+    create_header(window)
     game_screen = tk.Frame(window, bg='white')
     game_screen.grid(row=0, column=0)
     game_screen.place(relx=0.5, rely=0.5, anchor="center")
@@ -83,10 +82,10 @@ def start_test():
     start_time = time.time()
 
     countdown_label = tk.Label(game_screen, text="Time Left: 100", font=(
-        "Arial", 16), bg='white', fg='black')
+        "Arial", 24), bg='white', fg='black')
     countdown_label.pack(pady=10)
-    counter_label = tk.Label(game_screen, text="Counter: " +
-                             str(counter), font=("Arial", 16), bg='white', fg='black')
+    counter_label = tk.Label(game_screen, text="Rotations: " +
+                             str(counter), font=("Arial", 24), bg='white', fg='black')
     counter_label.pack(pady=10)
 
     success_label = tk.Label(game_screen, text="Success!", font=(
@@ -95,7 +94,7 @@ def start_test():
         "Arial", 24), fg="red", bg='white')
 
     progress_bar = ttk.Progressbar(
-        game_screen, orient="horizontal", length=200, mode="determinate", maximum=initial_time)
+        game_screen, orient="horizontal", length=400, mode="determinate", maximum=initial_time)
     progress_bar.pack(pady=10)
 
     def test():
@@ -113,6 +112,10 @@ def start_test():
         if remaining_time <= 0:
             if counter >= 10:
                 success_label.pack()
+                back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=(
+                    "Arial", 16), width=15, height=2, bg='white')
+                back_button.pack(pady=20)
+ 
             else:
                 failure_label.pack()
                 back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=(
@@ -120,7 +123,9 @@ def start_test():
                 back_button.pack(pady=20)
         else:
             window.after(100, test)
+                
     test()
+    
 
 
 def create_main_menu():
@@ -143,7 +148,7 @@ def create_main_menu():
     main_menu.grid(row=1, column=0, pady=50)
 
     difficulty_label = tk.Label(main_menu, text="Select Difficulty:", font=("Arial", 16), bg='white')
-    difficulty_label.grid(row=0, column=0, pady=10)
+    difficulty_label.grid(row=0, column=0, pady=20)
 
     difficulty_var = tk.StringVar()
     difficulty_var.set("Easy")
@@ -152,12 +157,12 @@ def create_main_menu():
     difficulty_options = ["Easy", "Medium", "Hard"]
     difficulty_menu = tk.OptionMenu(main_menu, difficulty_var, *difficulty_options)
     difficulty_menu.config(font=("Arial", 14))
-    difficulty_menu.grid(row=1, column=0, pady=10)
+    difficulty_menu.grid(row=1, column=0, pady=20)
 
     start_button = tk.Button(main_menu, text="Start", command=countdown_screen, font=("Arial", 16), width=10, height=2)
     start_button.grid(row=2, column=0, pady=20)
     exit_button = tk.Button(main_menu, text="Exit", command=lambda: [window.destroy(), on_closing()], font=("Arial", 16), width=10, height=2, bg="red")
-    exit_button.grid(row=3, column=0, pady=20)
+    exit_button.grid(row=3, column=0, pady=200, sticky="s")
 
 
 def run():
