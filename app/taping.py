@@ -8,7 +8,7 @@ window.configure(bg="white")
 initial_time = 30
 
 
-arduino = serial.Serial('COM8', 9600)
+arduino = serial.Serial('COM6',9600)
 time.sleep(2)
 window.attributes('-fullscreen', True)
 
