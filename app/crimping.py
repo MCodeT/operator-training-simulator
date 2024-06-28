@@ -5,10 +5,10 @@ import time
 
 window = tk.Tk()
 window.configure(bg="white")
-initial_time = 100
+initial_time = 35
 
 
-arduino = serial.Serial('COM6',9600)
+arduino = serial.Serial('COM4',9600)
 time.sleep(2)
 window.attributes('-fullscreen', True)
 
@@ -155,11 +155,11 @@ def create_main_menu():
         global initial_time
         selected_difficulty = difficulty_var.get()
         if selected_difficulty == "Easy":
-            initial_time = 100
+            initial_time = 35
         elif selected_difficulty == "Medium":
-            initial_time = 20
+            initial_time = 25
         elif selected_difficulty == "Hard":
-            initial_time = 10
+            initial_time = 15
 
     create_header(window)
     main_menu = tk.Frame(window)
