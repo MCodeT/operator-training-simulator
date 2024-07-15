@@ -5,10 +5,11 @@ import time
 
 window = tk.Tk()
 window.configure(bg="white")
-initial_time = 30
+initial_time = 60
+target = 60
 
 
-arduino = serial.Serial('COM6',9600)
+arduino = serial.Serial('COM4',9600)
 time.sleep(2)
 window.attributes('-fullscreen', True)
 
@@ -111,14 +112,19 @@ def start_test():
             if message == "Hole detected":
                 counter += 1
                 counter_label.config(text="Rotations: " + str(counter))
-
-        if remaining_time <= 0:
-            if counter >= 10:
+                
+        if counter == target:
+            
+            success_label.pack()
+            back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=(
+                "Arial", 16), width=15, height=2, bg='white')
+            back_button.pack(pady=20)
+        elif remaining_time <= 0:
+            if counter >= target:
                 success_label.pack()
                 back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=(
                     "Arial", 16), width=15, height=2, bg='white')
                 back_button.pack(pady=20)
- 
             else:
                 failure_label.pack()
                 back_button = tk.Button(game_screen, text="Back to Menu", command=create_main_menu, font=(
@@ -136,14 +142,14 @@ def create_main_menu():
         widget.destroy()
 
     def update_initial_time(*args):
-        global initial_time
+        global target
         selected_difficulty = difficulty_var.get()
         if selected_difficulty == "Easy":
-            initial_time = 30
+            target = 60
         elif selected_difficulty == "Medium":
-            initial_time = 20
+            target = 90
         elif selected_difficulty == "Hard":
-            initial_time = 10
+            target = 110
 
     create_header(window)
     main_menu = tk.Frame(window)
